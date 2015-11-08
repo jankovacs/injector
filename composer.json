@@ -1,0 +1,20 @@
+{
+  "name": "jankovacs/injector",
+  "description": "PHP dependency injector",
+  "version": "1.0.0",
+  "license": "No license",
+  "authors": [
+    {
+      "name": "Jan Kovács",
+      "email": "jan.v.kovacs@gmail.com"
+    }
+  ],
+  "require": {
+    "php":">=5.5"
+  },
+  "autoload": {
+        "psr-0": {
+            "injector": "/",
+        }
+  }
+}
