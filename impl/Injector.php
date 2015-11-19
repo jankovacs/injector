@@ -56,16 +56,18 @@ class Injector implements IInjector
     {
         $reflection = new ReflectionClass( $instance );
         $memberVariables = $reflection->getProperties( ReflectionProperty::IS_PUBLIC );
-        $pattern = "/[^(@Inject)(@var) \\*\\/\\n\\v][\\\\a-zA-Z0-9_]*/";
+        $pattern = "/(@Inject)/";
+        $replace = array( "/", " ", "*", "@Inject", "@var", "\n", "\r" );
 
         foreach( $memberVariables as $key=>$value )
         {
             $propertyName = $value->getName();
             $docComment = $value->getDocComment();
+
             $return_value = preg_match( $pattern, $docComment, $matches );
             if ( $return_value )
             {
-                $instance->$propertyName = $this->getInstance( $matches[0] );
+                $instance->$propertyName = $this->getInstance( str_replace( $replace, '', $docComment ) );
             }
         }
     }
