@@ -17,7 +17,7 @@ class InjectionMapper implements IInjectionMapper
     const TO_TYPE = 'to_type';
     const TO_OBJECT = 'to_object';
 
-    public function __construct($className)
+    public function __construct( $className )
     {
         $this->className = $className;
         $this->isInjectable = false;
@@ -29,8 +29,9 @@ class InjectionMapper implements IInjectionMapper
         return $this->mappingType;
     }
 
-    public function toType($typeName)
+    public function toType( $typeName )
     {
+        $this->className = $typeName;
         $this->setType( self::TO_TYPE );
     }
     public function toObject($object)
@@ -38,8 +39,12 @@ class InjectionMapper implements IInjectionMapper
         $this->object = $object;
         $this->setType( self::TO_OBJECT );
     }
-    public function asSingleton()
+    public function asSingleton( $type = '' )
     {
+        if ( $type )
+        {
+            $this->className = $type;
+        }
         $this->setType( self::AS_SINGLETON );
     }
 
@@ -59,7 +64,7 @@ class InjectionMapper implements IInjectionMapper
         {
             case self::AS_SINGLETON:
                 $this->isInjectable = false;
-                if ( !isset($this->instance) )
+                if ( !isset( $this->instance ) )
                 {
                     $this->isInjectable = true;
                     $this->instance = new $this->className;
@@ -67,17 +72,13 @@ class InjectionMapper implements IInjectionMapper
                 break;
 
             case self::TO_TYPE:
-                $this->instance = new $this->typeName;
-                $this->isInjectable = true;
-                break;
-
             case self::JUST_INJECT:
                 $this->instance = new $this->className;
                 $this->isInjectable = true;
                 break;
 
             case self::TO_OBJECT:
-                $this->isInjectable = !isset($this->instance);
+                $this->isInjectable = !isset( $this->instance );
                 $this->instance = $this->object;
                 break;
         }

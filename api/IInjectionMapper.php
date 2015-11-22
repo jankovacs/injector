@@ -23,7 +23,7 @@ interface IInjectionMapper {
      * Maps as a singleton.
      * @return
      */
-    function asSingleton();
+    function asSingleton( $type = '' );
 
     /**
      * Returns the instance base on mapping type.
