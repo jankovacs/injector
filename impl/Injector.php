@@ -52,7 +52,12 @@ class Injector implements IInjector
         return $instance;
     }
 
-    private function inject( $instance )
+    /**
+     * Injects all defined dependencies to instantiated class passed as argument
+     * @param $instance an instantiated class what has to be injected
+     * @return null
+     */
+    public function inject( $instance )
     {
         $reflection = new ReflectionClass( $instance );
         $memberVariables = $reflection->getProperties( ReflectionProperty::IS_PUBLIC );
