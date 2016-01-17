@@ -5,12 +5,30 @@ use injector\api\IInjectionMapper;
 
 class InjectionMapper implements IInjectionMapper
 {
-    private $className;
-    private $typeName;
-    private $mappingType;
-    private $instance;
-    private $object;
-    private $isInjectable;
+    /**
+     * @var string
+     */
+    private $_className;
+
+    /**
+     * @var string
+     */
+    private $_mappingType;
+
+    /**
+     * @var object
+     */
+    private $_instance;
+
+    /**
+     * @var Object
+     */
+    private $_object;
+
+    /**
+     * @var bool
+     */
+    private $_isInjectable;
 
     const JUST_INJECT = 'just_inject';
     const AS_SINGLETON = 'as_singleton';
@@ -19,78 +37,94 @@ class InjectionMapper implements IInjectionMapper
 
     public function __construct( $className )
     {
-        $this->className = $className;
-        $this->isInjectable = false;
+        $this->setClassName( $className );
+        $this->_isInjectable = false;
         $this->setType( self::JUST_INJECT );
     }
 
     public function getMappingType()
     {
-        return $this->mappingType;
+        return $this->_mappingType;
     }
 
     public function toType( $typeName )
     {
-        $this->className = $typeName;
+        $this->setClassName( $typeName );
         $this->setType( self::TO_TYPE );
     }
-    public function toObject($object)
+    public function toObject( $object )
     {
-        $this->object = $object;
+        $this->_object = $object;
         $this->setType( self::TO_OBJECT );
     }
-    public function asSingleton( $type = '' )
+    public function asSingleton( $typeName = '' )
     {
-        if ( $type )
+        if ( $typeName )
         {
-            $this->className = $type;
+            $this->setClassName( $typeName );
         }
         $this->setType( self::AS_SINGLETON );
     }
 
     private function setClassName( $className )
     {
-        $this->className = $className;
+        $this->_className = $className;
     }
 
     private function setType( $type )
     {
-        $this->mappingType = $type;
+        $this->_mappingType = $type;
     }
 
     public function getInstance()
     {
-        switch( $this->mappingType )
+        switch( $this->_mappingType )
         {
             case self::AS_SINGLETON:
-                $this->isInjectable = false;
-                if ( !isset( $this->instance ) )
-                {
-                    $this->isInjectable = true;
-                    $this->instance = new $this->className;
-                }
+                $this->setOrCreateSingleton();
                 break;
 
             case self::TO_TYPE:
             case self::JUST_INJECT:
-                $this->instance = new $this->className;
-                $this->isInjectable = true;
+                $this->createNewInstance();
                 break;
 
             case self::TO_OBJECT:
-                $this->isInjectable = !isset( $this->instance );
-                $this->instance = $this->object;
+                $this->setObject();
                 break;
         }
 
-        return $this->instance;
+        return $this->_instance;
     }
 
-    public function __get( $property )
+    private function setOrCreateSingleton()
     {
-        if( property_exists( $this, $property ) )
+        $this->_isInjectable = false;
+        if ( !isset( $this->_instance ) )
         {
-            return $this->$property;
+            $this->_isInjectable = true;
+            $this->_instance = new $this->_className;
         }
+    }
+
+    private function createNewInstance()
+    {
+        $this->_instance = new $this->_className;
+        $this->_isInjectable = true;
+    }
+
+    private function setObject()
+    {
+        $this->_isInjectable = !isset( $this->_instance );
+        $this->_instance = $this->_object;
+    }
+
+    /**
+     * Tells if an object is injectable
+     * @return bool
+     */
+    public function getIsInjectable()
+    {
+        return $this->_isInjectable;
     }
 }

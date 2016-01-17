@@ -6,28 +6,35 @@ namespace injector\api;
 interface IInjectionMapper {
 
     /**
-     * Maps to a given type.
+     * Maps the given class to a specified type.
      * @param $typeName
      * @return
      */
-    function toType($typeName);
+    public function toType( $typeName );
 
     /**
-     * Maps to a concrete object.
+     * Maps the given class to a concrete, instantiated object.
      * @param $object
      * @return
      */
-    function toObject($object);
+    public function toObject( $object );
 
     /**
-     * Maps as a singleton.
-     * @return
+     * Maps the given class as a singleton
+     * @param string $type if specified, then it will return with the given singleton class
+     * @return mixed
      */
-    function asSingleton( $type = '' );
+    public function asSingleton( $type = '' );
 
     /**
      * Returns the instance base on mapping type.
      * @return
      */
-    function getInstance();
+    public function getInstance();
+
+    /**
+     * Tells if an object is injectable
+     * @return bool
+     */
+    public function getIsInjectable();
 }
