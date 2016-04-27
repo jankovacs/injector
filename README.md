@@ -7,7 +7,7 @@ Simple example for usage:
 
 1) You have to specifiy somewhere in your system a config file for mappings, like this below:
 
-<code>
+```
 class InjectionMappings {
      /**
      * @Inject
@@ -34,19 +34,19 @@ class InjectionMappings {
         $this->injector->map( TestDetectDevice::class );
     }
 }
-</code>
+```
 
 
 2) Then you need to instantiate injector, pass the config file, and set the mappings ( setMappings() method in the example above, but it could be named to whatever you want )
-<code>
+```
 $injector = new \injector\impl\Injector();
 $injectionMappings = new config_InjectionMappings();
 $injector->inject( $injectionMappings );
 $injectionMappings->setMappings();
-</code>
+```
 
 3) Example for modifying your dispatcher class in Zend Framework 1 ( within your Bootstrap.php ). So thus your controllers will be injected.
-<code>
+```
 protected function setDispatcher( )
 {
     $injector = $this->setInjector();
@@ -54,10 +54,10 @@ protected function setDispatcher( )
     $injector->inject( $dispatcher );
     $this->frontController->setDispatcher( $dispatcher );
 }
-</code>
+```
 
 4) This is how you can inject to your classes ( models, controllers,  etc. )
-<code>
+```
 class IndexController
 {
     /**
@@ -91,4 +91,4 @@ class IndexController
      */
     public $mobileDetect;
 }
-</code>
+```
