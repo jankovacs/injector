@@ -2,29 +2,32 @@
 
 namespace injector\api;
 
-
+/**
+ * Interface IInjector
+ *
+ * @var boolean $isInjectable
+ * @package injector\api
+ */
 interface IInjector {
 
     /**
-     * Maps the given class.
-     * See \injector\api\IInjectionMapper for possibilities.
-     * @param $className string the name of the class in string format
-     * @return \injector\api\IInjectionMapper
+     * @param $className the name of the class in string format
+     * @return \injector\impl\ExtendedMapper
      */
     public function map( $className );
 
     /**
-     * Returns with the injected instance of the requested class/type.
-     * If it is mapped as a singleton, it will give back the single instance.
-     * @param $className string
+     * Returns with the instance of the requested class/type.
+     * If it mapped as singleton, it will give back the single instance.
+     * @param $className
      * @return mixed
      */
-    public function getInstance( $className );
+    public function getInstance( $className, $where = '' );
 
     /**
-     * Injects all defined dependencies to instantiated class passed as argument
-     * @param $instance object the instantiated class what has to be injected
-     * @return null
+     *
+     * @param $instance
+     * @return mixed
      */
     public function inject( $instance );
 }

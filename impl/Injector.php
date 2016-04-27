@@ -7,8 +7,13 @@ use injector\api\IInjector;
 use ReflectionClass;
 use ReflectionProperty;
 
+/**
+ * Class Injector
+ * @package injector\impl
+ */
 class Injector implements IInjector
 {
+    
     /**
      * @var array
      */
@@ -17,43 +22,40 @@ class Injector implements IInjector
     public function __construct()
     {
         $this->mappings = array();
-        $this->map( IInjector::class )->toObject( $this );
+        $this->map( '\injector\api\IInjector' )->toObject( $this );
     }
 
     /**
-     * Maps the given class.
-     * See \injector\api\IInjectionMapper for possibilities.
-     * @param $className string the name of the class in string format
+     * @param $className the name of the class in string format
      * @return \injector\api\IInjectionMapper
      */
     public function map( $className )
     {
-        $className = (string)$className;
         return array_key_exists( $className, $this->mappings ) ? $this->mappings[ $className ] : $this->createMapping( $className );
     }
 
     /**
-     * Creates a mapping for the given class.
-     * @param $className string the name of the class
+     * @param $className
      * @return \injector\api\IInjectionMapper
      */
     private function createMapping( $className )
     {
-        return $this->mappings[ $className ] = new InjectionMapper( $className );
+        $this->mappings[ $className ] = new ExtendedMapper( $className );
+        return $this->mappings[ $className ];
     }
 
     /**
-     * Returns with the injected instance of the requested class/type.
-     * If it is mapped as a singleton, it will give back the single instance.
-     * @param $className string
+     * Returns with the instance of the requested class/type.
+     * If it mapped as singleton, it will give back the single instance.
+     * @param $className
      * @return mixed
      */
-    public function getInstance( $className )
+    public function getInstance( $className, $where = '' )
     {
-        /** @var InjectionMapper $injectionMapper */
-        $injectionMapper = $this->mappings[ $className ];
-        $instance = $injectionMapper->getInstance();
-        if ( $injectionMapper->getIsInjectable() )
+        /** @var ExtendedMapper $injectionMapperInstance */
+        $injectionMapperInstance = $this->getInjectionMapperInstance( $className );
+        $instance = $injectionMapperInstance->getInstance( $where );
+        if ( $injectionMapperInstance->isInjectable )
         {
             $this->inject( $instance );
         }
@@ -61,25 +63,29 @@ class Injector implements IInjector
     }
 
     /**
-     * Injects all defined dependencies to instantiated class passed as argument
-     * @param $instance string the instantiated class what has to be injected
-     * @return null
+     * @param $className
+     * @return InjectionMapper
      */
+    private function getInjectionMapperInstance($className )
+    {
+        return array_key_exists( $className, $this->mappings ) && $this->mappings[ $className ] instanceof ExtendedMapper ?  $this->mappings[ $className ] : null;
+    }
+
     public function inject( $instance )
     {
         $reflection = new ReflectionClass( $instance );
         $memberVariables = $reflection->getProperties( ReflectionProperty::IS_PUBLIC );
-        $pattern = "@Inject";
+        $pattern = "/(@Inject)/";
         $replace = array( "/", " ", "*", "@Inject", "@var", "\n", "\r" );
 
         foreach( $memberVariables as $key=>$value )
         {
             $propertyName = $value->getName();
             $docComment = $value->getDocComment();
-
-            if ( strpos( $docComment, $pattern ) !== false )
+            $return_value = preg_match( $pattern, $docComment, $matches );
+            if ( $return_value )
             {
-                $instance->$propertyName = $this->getInstance( str_replace( $replace, '', $docComment ) );
+                $instance->$propertyName = $this->getInstance( str_replace( $replace, '', $docComment ), $reflection->getName() );
             }
         }
     }
