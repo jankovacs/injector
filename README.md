@@ -18,14 +18,19 @@ class InjectionMappings {
     {
         //------- will always create a new instance
         $this->injector->map( TestModel::class );
+        
         //------- will always create a new instance of the given type
         $this->injector->map( ITestModel::class )->toType( TestModelOne::class );
+        
         //------- will return with the passed object
         $this->injector->map( TestModelOne::class )->toObject( new TestModelOne() );
+        
         //------- will return with the singleton instance
         $this->injector->map( TestModelTwo::class )->asSingleton();
+        
         //------- will return with the given singleton instance
         $this->injector->map( ITestSingleton::class )->toSingleton( TestSingleton::class );
+        
         /** @var \injector\api\IInjectionProvider $providerMappings */
         $providerMappings = $this->injector->map( ITest::class )->toProvider( );
         $providerMappings->addUnique( 'SomeController' )->toSingleton( TestOne::class );
@@ -37,10 +42,10 @@ class InjectionMappings {
 ```
 
 
-2) Then you need to instantiate injector, pass the config file, and set the mappings ( setMappings() method in the example above, but it could be named to whatever you want )
+2) Then you need to instantiate the injector and the the config file, inject the config file and set the mappings ( setMappings() method in the example above, but it could be named to whatever you want )
 ```
 $injector = new \injector\impl\Injector();
-$injectionMappings = new config_InjectionMappings();
+$injectionMappings = new InjectionMappings();
 $injector->inject( $injectionMappings );
 $injectionMappings->setMappings();
 ```
