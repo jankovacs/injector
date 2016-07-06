@@ -99,7 +99,7 @@ class InjectionMapper implements IInjectionMapper
 
     private function prepareObject()
     {
-        $this->isInjectable = !isset( $this->instance );
+        $this->isInjectable = !isset( $this->instance ) && is_object( $this->object );
         $this->instance = $this->object;
         return $this->instance;
     }
