@@ -55,9 +55,17 @@ class Injector implements IInjector
         /** @var ExtendedMapper $injectionMapperInstance */
         $injectionMapperInstance = $this->getInjectionMapperInstance( $className );
         $instance = $injectionMapperInstance->getInstance( $where );
-        if ( $injectionMapperInstance->isInjectable )
-        {
+
+        if ( $injectionMapperInstance->isInjectable ) {
+            if ( method_exists($instance, 'preInject') ){
+                $instance->preInject();
+            }
+
             $this->inject( $instance );
+
+            if ( method_exists($instance, 'postInject') ){
+                $instance->postInject();
+            }
         }
         return $instance;
     }
