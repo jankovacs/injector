@@ -31,6 +31,7 @@ class Injector implements IInjector
      */
     public function map( $className )
     {
+        $className = ( strpos($className,'\\') !== 0 ? '\\' : '' ) . $className;
         return array_key_exists( $className, $this->mappings ) ? $this->mappings[ $className ] : $this->createMapping( $className );
     }
 
@@ -40,8 +41,9 @@ class Injector implements IInjector
      */
     private function createMapping( $className )
     {
-        $this->mappings[ $className ] = new ExtendedMapper( $className );
-        return $this->mappings[ $className ];
+        $mapper = new ExtendedMapper( $className );
+        $this->mappings[ $className ] = $mapper;
+        return $mapper;
     }
 
     /**
@@ -93,7 +95,8 @@ class Injector implements IInjector
             $return_value = preg_match( $pattern, $docComment, $matches );
             if ( $return_value )
             {
-                $instance->$propertyName = $this->getInstance( str_replace( $replace, '', $docComment ), $reflection->getName() );
+                $className = str_replace( $replace, '', $docComment );
+                $instance->$propertyName = $this->getInstance( $className, $reflection->getName() );
             }
         }
     }

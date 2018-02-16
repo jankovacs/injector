@@ -11,7 +11,7 @@ namespace injector\api;
 interface IInjector {
 
     /**
-     * @param $className the name of the class in string format
+     * @param $className string name of the class in string format
      * @return \injector\impl\ExtendedMapper
      */
     public function map( $className );
