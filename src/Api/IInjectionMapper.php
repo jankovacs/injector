@@ -1,6 +1,6 @@
 <?php
 
-namespace injector\api;
+namespace JanKovacs\Injector\Api;
 
 
 interface IInjectionMapper {
@@ -12,29 +12,26 @@ interface IInjectionMapper {
      *
      * @param string $typeName
      *
-     * @return IInjectionPayload
      */
-    public function toType($typeName);
+    public function toType(string $typeName):void;
 
     /**
      * Maps to a concrete object.
      *
      * @api
      *
-     * @param mixed $object
+     * @param object $object
      *
-     * @return IInjectionPayload
      */
-    public function toObject($object);
+    public function toObject(object $object):void;
 
     /**
      * Maps as a singleton.
      *
      * @api
      *
-     * @return IInjectionPayload
      */
-    public function asSingleton( );
+    public function asSingleton():void;
 
     /**
      * Maps the type as a singleton
@@ -43,9 +40,8 @@ interface IInjectionMapper {
      *
      * @param string $type
      *
-     * @return IInjectionPayload
      */
-    public function toSingleton( $type );
+    public function toSingleton(string $type):void;
 
     /**
      * Returns the instance base on mapping type.
@@ -54,9 +50,9 @@ interface IInjectionMapper {
      *
      * @param string $where
      *
-     * @return mixed
+     * @return null|object
      */
-    public function getInstance( $where = '' );
+    public function getInstance(string $where = ''):?object;
 
 
     /**
@@ -66,6 +62,6 @@ interface IInjectionMapper {
      *
      * @return string
      */
-    public function getMappingType();
+    public function getMappingType():string;
 
 }

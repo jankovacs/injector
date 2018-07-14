@@ -1,6 +1,6 @@
 <?php
 
-namespace injector\bridge\zf1;
+namespace JanKovacs\Injector\Bridge\Zf1;
 
 use Exception;
 use Zend_Controller_Action;
@@ -14,7 +14,7 @@ class Dispatcher extends Zend_Controller_Dispatcher_Standard
 {
         /**
          * @Inject
-         * @var \injector\api\IInjector
+         * @var \JanKovacs\Injector\Api\IInjector
          */
         public $injector;
 

@@ -1,26 +1,28 @@
 <?php
 
-namespace injector\impl;
+namespace JanKovacs\Injector\Impl;
 
-use injector\api\IInjectionProvider;
+use JanKovacs\Injector\Api\IInjectionProvider;
+use JanKovacs\Injector\Api\IInjectionMapper;
 
 class InjectionProvider implements IInjectionProvider {
 
-    /**
-     * @var array
-     */
-    private $uniqueMappers;
+    /** @var array */
+    protected $uniqueMappers;
 
-    /**
-     * @var \injector\api\IInjectionMapper
-     */
-    private $exceptionMapper;
+    /** @var \JanKovacs\Injector\Api\IInjectionMapper */
+    protected $exceptionMapper;
 
-    private $exceptClassName;
+    /** @var string */
+    protected $exceptClassName;
 
     public $className;
 
-    public function __construct( $className )
+    /**
+     * InjectionProvider constructor.
+     * @param string $className
+     */
+    public function __construct(string $className)
     {
         $this->uniqueMappers = array();
         $this->className = $className;
@@ -29,9 +31,9 @@ class InjectionProvider implements IInjectionProvider {
     /**
      *
      * @param $className
-     * @return \injector\api\IInjectionMapper
+     * @return \JanKovacs\Injector\Api\IInjectionMapper
      */
-    public function addUnique( $className )
+    public function addUnique(string $className):IInjectionMapper
     {
         $this->uniqueMappers[ $className ] = new InjectionMapper( '' );
         return $this->uniqueMappers[ $className ];
@@ -39,23 +41,27 @@ class InjectionProvider implements IInjectionProvider {
 
     /**
      * @param $className
-     * @return \injector\api\IInjectionMapper
+     * @return \JanKovacs\Injector\Api\IInjectionMapper
      */
-    public function addExceptTo( $className )
+    public function addExceptTo(string $className):IInjectionMapper
     {
         $this->exceptClassName = $className;
         return $this->exceptionMapper = new InjectionMapper( $this->className );
     }
 
     /**
-     * @return \injector\api\IInjectionMapper
+     * @return \JanKovacs\Injector\Api\IInjectionMapper
      */
-    public function addToRest()
+    public function addToRest():IInjectionMapper
     {
         return $this->addExceptTo( $this->className );
     }
 
-    public function getInstance( $where = '' )
+    /**
+     * @param string $where
+     * @return null|object
+     */
+    public function getInstance(string $where = ''):?object
     {
         $instance = null;
         if ( array_key_exists( $where, $this->uniqueMappers ) )

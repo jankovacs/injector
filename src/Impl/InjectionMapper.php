@@ -1,9 +1,8 @@
 <?php
 
-namespace injector\impl;
+namespace JanKovacs\Injector\Impl;
 
-use injector\api\IInjectionMapper;
-use injector\api\IInjectionPayload;
+use JanKovacs\Injector\Api\IInjectionMapper;
 use ReflectionClass;
 
 class InjectionMapper implements IInjectionMapper
@@ -23,32 +22,28 @@ class InjectionMapper implements IInjectionMapper
     /** @var bool */
     protected $isInjectable;
 
-    /** @var IInjectionPayload */
-    protected $injectionPayload;
-
-    const JUST_INJECT = 'just_inject';
-    const AS_SINGLETON = 'as_singleton';
-    const TO_SINGLETON = 'to_singleton';
-    const TO_TYPE = 'to_type';
-    const TO_OBJECT = 'to_object';
+    protected const JUST_INJECT = 'just_inject';
+    protected const AS_SINGLETON = 'as_singleton';
+    protected const TO_SINGLETON = 'to_singleton';
+    protected const TO_TYPE = 'to_type';
+    protected const TO_OBJECT = 'to_object';
 
     /**
      * InjectionMapper constructor.
      *
      * @param string $className
      */
-    public function __construct( $className )
+    public function __construct(string $className)
     {
         $this->className = $className;
-        $this->isInjectable = false;
-        $this->injectionPayload = new InjectionPayload();
+        $this->isInjectable = true;
         $this->setType( self::JUST_INJECT );
     }
 
     /**
      * @inheritdoc
      */
-    public function getMappingType()
+    public function getMappingType():string
     {
         return $this->mappingType;
     }
@@ -56,46 +51,42 @@ class InjectionMapper implements IInjectionMapper
     /**
      * @inheritdoc
      */
-    public function toType( $typeName )
+    public function toType(string $typeName):void
     {
         $this->className = $typeName;
         $this->setType( self::TO_TYPE );
-        return $this->injectionPayload;
     }
 
     /**
      * @inheritdoc
      */
-    public function toObject($object)
+    public function toObject(object $object):void
     {
         $this->object = $object;
         $this->setType( self::TO_OBJECT );
-        return $this->injectionPayload;
     }
 
     /**
      * @inheritdoc
      */
-    public function asSingleton( )
+    public function asSingleton():void
     {
         $this->setType( self::AS_SINGLETON );
-        return $this->injectionPayload;
     }
 
     /**
      * @inheritdoc
      */
-    public function toSingleton($type)
+    public function toSingleton(string $type):void
     {
         $this->className = $type;
         $this->setType( self::TO_SINGLETON );
-        return $this->injectionPayload;
     }
 
     /**
      * @param string $type
      */
-    protected function setType( $type )
+    protected function setType(string $type):void
     {
         $this->mappingType = $type;
     }
@@ -104,7 +95,7 @@ class InjectionMapper implements IInjectionMapper
     /**
      * @inheritdoc
      */
-    public function getInstance( $where = '' )
+    public function getInstance(string $where = ''):?object
     {
         if ($this->mappingType === self::AS_SINGLETON || $this->mappingType === self::TO_SINGLETON) {
             return $this->prepareSingleton();
@@ -120,24 +111,24 @@ class InjectionMapper implements IInjectionMapper
     }
 
     /**
-     * @return mixed
+     * @return null|object
      */
-    private function prepareSingleton()
+    protected function prepareSingleton():?object
     {
-        $this->isInjectable = false;
-        if ( !isset( $this->instance ) )
+        $this->isInjectable = $this->instance === null;
+        /*if ($this->instance === null)
         {
             $this->isInjectable = true;
             $this->instance = new $this->className;
-        }
+        }*/
 
         return $this->instance;
     }
 
     /**
-     * @return mixed
+     * @return object
      */
-    private function prepareObject()
+    protected function prepareObject():object
     {
         $this->isInjectable = !isset( $this->instance ) && is_object( $this->object );
         $this->instance = $this->object;
@@ -145,21 +136,21 @@ class InjectionMapper implements IInjectionMapper
     }
 
     /**
-     * @return object
-     * @throws \ReflectionException
+     * @return null|object
+     *
      */
-    private function prepareNewInstance()
+    protected function prepareNewInstance():?object
     {
         $this->isInjectable = true;
-        $reflectionClass = new ReflectionClass($this->className);
-        return $reflectionClass->newInstanceArgs($this->injectionPayload->getPayload());
+        return new $this->className;
     }
 
     /**
      * @param $property
+     *
      * @return mixed|null
      */
-    public function __get( $property )
+    public function __get($property)
     {
         return property_exists( $this, $property ) ? $this->$property : null;
     }
