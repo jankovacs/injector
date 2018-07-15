@@ -1,34 +1,40 @@
-# injector
 PHP Dependency Injector.
 =======================
+
+Injects the class dependencies based on constructor signature.
+Native types are not supported as dependencies (like int, array, string etc.) as into constructor one should pass just dependencies to other classes, not concrete data, e.g. 'locale' - that could be retrieved from a config class.
+
+_Singleton support is kept, but it is not recommended to use singletons._
 
 Simple example for usage:
 ------------------------
 
-1) You have to specifiy somewhere in your system a config file for mappings, like this below:
+1) You have to specify somewhere in your application a config file for mappings, like this below:
 
 ```
 class InjectionMappings {
-     /**
-     * @Inject
-     * @var  \injector\api\IInjector
-     */
-    public $injector;
+
+    public function __construct(IInjector $injector)
+    {
+        $this->injector = $injector;
+    }
+
+
     public function setMappings()
     {
         //------- will always create a new instance
         $this->injector->map( TestModel::class );
         
-        //------- will always create a new instance of the given type
+        //------- will always create a new instance of the mapped type
         $this->injector->map( ITestModel::class )->toType( TestModelOne::class );
         
-        //------- will return with the passed object
+        //------- will return with the mapped object
         $this->injector->map( TestModelOne::class )->toObject( new TestModelOne() );
         
         //------- will return with the singleton instance
         $this->injector->map( TestModelTwo::class )->asSingleton();
         
-        //------- will return with the given singleton instance
+        //------- will return with the mapped class as singleton
         $this->injector->map( ITestSingleton::class )->toSingleton( TestSingleton::class );
         
         /** @var \injector\api\IInjectionProvider $providerMappings */
@@ -42,58 +48,27 @@ class InjectionMappings {
 ```
 
 
-2) Then you need to instantiate the injector and the the config file, inject the config file and set the mappings ( setMappings() method in the example above, but it could be named to whatever you want )
+2) Then you need to instantiate the injector and the the mapper class and set the mappings ( setMappings() method in the example above, but it could be named to whatever you want )
 ```
+// create injector
 $injector = new \injector\impl\Injector();
-$injectionMappings = new InjectionMappings();
-$injector->inject( $injectionMappings );
+// map you injection mapping class
+$injector->map(InjectionMappings::class);
+// get the intantiated mapper class from injector (it will be injected in this way)
+$injectionMappings = $injector->getInstance(InjectionMappings::class);
+// set the mappings
 $injectionMappings->setMappings();
 ```
 
-3) Example for modifying your dispatcher class in Zend Framework 1 ( within your Bootstrap.php ). So thus your controllers will be injected.
-```
-protected function setDispatcher( )
-{
-    $injector = $this->setInjector();
-    $dispatcher = new \injector\bridge\zf1\Dispatcher();
-    $injector->inject( $dispatcher );
-    $this->frontController->setDispatcher( $dispatcher );
-}
-```
-
-4) This is how you can inject to your classes ( models, controllers,  etc. )
+3) This is how you can inject dependencies into your classes
 ```
 class IndexController
 {
-    /**
-     * @Inject
-     * @var injector\test\ITest
-     */
-    public $iTest;
-    /**
-     * @Inject
-     * @var injector\test\ITestModel
-     */
-    public $iTestModel;
-    /**
-     * @Inject
-     * @var injector\test\TestModelOne
-     */
-    public $testModelOne;
-    /**
-     * @Inject
-     * @var injector\test\TestModelTwo
-     */
-    public $testModelTwo;
-    /**
-     * @Inject
-     * @var injector\test\ITestSingleton
-     */
-    public $iTestSingleton;
-    /**
-     * @Inject
-     * @var TestDetectDevice
-     */
-    public $mobileDetect;
+    public function __construct(ITestModel $testModel, ITestSingleton $testSingletion) 
+    {
+    
+    }
 }
 ```
+
+You don't need to rewrite your code by adding some injector specific stuff (like in the initial version of this injector), it is injecting the needed dependencies by the constructor signature.
