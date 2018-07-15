@@ -23,9 +23,4 @@ interface IInjector {
      * @return null|object
      */
     public function getInstance(string $className, string $where = ''):?object;
-
-    /**
-     * @param object $instance
-     */
-    public function inject(object $instance):void;
 }

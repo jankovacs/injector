@@ -2,16 +2,11 @@
 
 namespace JanKovacs\Injector\Impl;
 
-use JanKovacs\Injector\Api\IProviderMapper;
 use JanKovacs\Injector\Api\IInjector;
+use JanKovacs\Injector\Api\IProviderMapper;
 use JanKovacs\Injector\Exceptions\InjectionMapperException;
 use ReflectionClass;
-use ReflectionProperty;
 
-/**
- * Class Injector
- * @package JanKovacs\Injector\Impl
- */
 class Injector implements IInjector
 {
     
@@ -25,7 +20,7 @@ class Injector implements IInjector
     {
         $this->mappings = array();
         $this
-            ->map('\JanKovacs\Injector\Api\IInjector')
+            ->map(IInjector::class)
             ->toObject($this);
     }
 
@@ -35,7 +30,7 @@ class Injector implements IInjector
      */
     public function map(string $className):IProviderMapper
     {
-        $className = (strpos($className,'\\') !== 0 ? '\\' : '') . $className;
+        $className = $this->cleanClassName($className);
         return array_key_exists($className, $this->mappings) ? $this->mappings[ $className ] : $this->createMapping($className);
     }
 
@@ -64,38 +59,69 @@ class Injector implements IInjector
      * @param string $className
      * @param string $where
      * @return null|object
+     * @throws InjectionMapperException
+     * @throws \ReflectionException
      */
     public function getInstance(string $className, string $where = ''):?object
     {
         $className = $this->cleanClassName($className);
-        /** @var IProviderMapper $injectionMapperInstance */
-        $injectionMapperInstance = $this->getInjectionMapperInstance($className);
+        /** @var IProviderMapper $injectionMapper */
+        $injectionMapper = $this->getInjectionMapper($className);
 
-        if ($injectionMapperInstance === null) {
+        if ($injectionMapper === null) {
             throw new InjectionMapperException('There is no defined mapping for '.$className);
         }
 
-        if ($injectionMapperInstance->isInjectable ) {
+        $mappingType = $injectionMapper->getMappingType();
+        $className = $injectionMapper->getClassName();
 
-            $className = $this->cleanClassName($injectionMapperInstance->className);
+        if ($mappingType === IProviderMapper::AS_SINGLETON || $mappingType === IProviderMapper::TO_SINGLETON) {
+            if ($injectionMapper->getInstance() !== null) {
+                return $injectionMapper->getInstance();
+            }
 
-            $reflectionClass = new ReflectionClass($className);
-            return $reflectionClass->newInstanceArgs(
-                $this->getConstructorPayloads($reflectionClass)
-            );
+            $instance = $this->createInstance($className);
+            $injectionMapper->setInstance($instance);
+            return $instance;
         }
+        else if ($mappingType === IProviderMapper::TO_TYPE || $mappingType === IProviderMapper::JUST_INJECT) {
+            return $this->createInstance($className);
+        }
+        else if ($mappingType === IProviderMapper::TO_OBJECT) {
+            return $injectionMapper->getInstance();
+        }
+
         return null;
+    }
+
+    /**
+     * @param string $className
+     * @return null|object
+     * @throws InjectionMapperException
+     * @throws \ReflectionException
+     */
+    protected function createInstance(string $className):?object
+    {
+        $className = $this->cleanClassName($className);
+
+        $reflectionClass = new ReflectionClass($className);
+        return $reflectionClass->newInstanceArgs(
+            $this->getConstructorPayloads($reflectionClass)
+        );
     }
 
     /**
      * @param ReflectionClass $reflectionClass
      * @return array
+     * @throws InjectionMapperException
+     * @throws \ReflectionException
      */
     protected function getConstructorPayloads(ReflectionClass $reflectionClass):array
     {
         $constructorPayloads = [];
-        $constructorPsrameters = $reflectionClass->getConstructor() ? $reflectionClass->getConstructor()->getParameters() : [];
-        foreach ($constructorPsrameters as $parameter) {
+        $constructorParameters = $reflectionClass->getConstructor() ? $reflectionClass->getConstructor()->getParameters() : [];
+
+        foreach ($constructorParameters as $parameter) {
             $constructorPayloads[] = $this->getInstance($parameter->getType()->getName());
         }
         return $constructorPayloads;
@@ -105,59 +131,8 @@ class Injector implements IInjector
      * @param string $className
      * @return IProviderMapper|null
      */
-    protected function getInjectionMapperInstance(string $className):?IProviderMapper
+    protected function getInjectionMapper(string $className):?IProviderMapper
     {
         return array_key_exists( $className, $this->mappings ) && $this->mappings[ $className ] instanceof IProviderMapper ?  $this->mappings[ $className ] : null;
-    }
-
-    /**
-     * @param object $instance
-     * @throws \ReflectionException
-     */
-    public function inject(object $instance):void
-    {
-        $reflection = new ReflectionClass( $instance );
-        $memberVariables = $reflection->getProperties( ReflectionProperty::IS_PUBLIC );
-        $pattern = "/(@Inject)/";
-        $replace = array( "/", " ", "*", "@Inject", "@var", "\n", "\r" );
-
-        foreach($memberVariables as $key=>$value)
-        {
-            $propertyName = $value->getName();
-            $docComment = $value->getDocComment();
-            $return_value = preg_match( $pattern, $docComment, $matches );
-            if ( $return_value )
-            {
-                $className = str_replace( $replace, '', $docComment );
-                $instance->$propertyName = $this->getInstanceInOldWay( $className, $reflection->getName() );
-            }
-        }
-    }
-
-    /**
-     * @param string $className
-     * @param string $where
-     * @return null|object
-     * @throws \ReflectionException
-     */
-    protected function getInstanceInOldWay(string $className, string $where = ''):?object
-    {
-        $className = $this->cleanClassName($className);
-        /** @var ExtendedMapper $injectionMapperInstance */
-        $injectionMapperInstance = $this->getInjectionMapperInstance( $className );
-        $instance = $injectionMapperInstance->getInstance( $where );
-
-        if ( $injectionMapperInstance->isInjectable ) {
-            if ( method_exists($instance, 'preInject') ){
-                $instance->preInject();
-            }
-
-            $this->inject( $instance );
-
-            if ( method_exists($instance, 'postInject') ){
-                $instance->postInject();
-            }
-        }
-        return $instance;
     }
 }

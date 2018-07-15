@@ -13,20 +13,11 @@ class InjectionMapper implements IInjectionMapper
     /** @var string */
     protected $mappingType;
 
-    /** @var mixed */
+    /** @var object */
     protected $instance;
-
-    /** @var mixed */
-    protected $object;
 
     /** @var bool */
     protected $isInjectable;
-
-    protected const JUST_INJECT = 'just_inject';
-    protected const AS_SINGLETON = 'as_singleton';
-    protected const TO_SINGLETON = 'to_singleton';
-    protected const TO_TYPE = 'to_type';
-    protected const TO_OBJECT = 'to_object';
 
     /**
      * InjectionMapper constructor.
@@ -62,7 +53,7 @@ class InjectionMapper implements IInjectionMapper
      */
     public function toObject(object $object):void
     {
-        $this->object = $object;
+        $this->instance = $object;
         $this->setType( self::TO_OBJECT );
     }
 
@@ -91,67 +82,27 @@ class InjectionMapper implements IInjectionMapper
         $this->mappingType = $type;
     }
 
-
     /**
      * @inheritdoc
      */
-    public function getInstance(string $where = ''):?object
+    public function getInstance():?object
     {
-        if ($this->mappingType === self::AS_SINGLETON || $this->mappingType === self::TO_SINGLETON) {
-            return $this->prepareSingleton();
-        }
-        else if ($this->mappingType === self::TO_TYPE || $this->mappingType === self::JUST_INJECT) {
-            return $this->prepareNewInstance();
-        }
-        else if ($this->mappingType === self::TO_OBJECT) {
-            return $this->prepareObject();
-        }
-
-        return null;
-    }
-
-    /**
-     * @return null|object
-     */
-    protected function prepareSingleton():?object
-    {
-        $this->isInjectable = $this->instance === null;
-        /*if ($this->instance === null)
-        {
-            $this->isInjectable = true;
-            $this->instance = new $this->className;
-        }*/
-
         return $this->instance;
     }
 
     /**
-     * @return object
+     * @param object $instance
      */
-    protected function prepareObject():object
+    public function setInstance(object $instance): void
     {
-        $this->isInjectable = !isset( $this->instance ) && is_object( $this->object );
-        $this->instance = $this->object;
-        return $this->instance;
+        $this->instance = $instance;
     }
 
     /**
-     * @return null|object
-     *
+     * @return string
      */
-    protected function prepareNewInstance():?object
+    public function getClassName(): string
     {
-        $this->isInjectable = true;
-        return new $this->className;
-    }
-
-    /**
-     * @param $property
-     *
-     * @return mixed|null
-     */
-    public function __get($property)
-    {
-        return property_exists( $this, $property ) ? $this->$property : null;
+        return $this->className;
     }
 }

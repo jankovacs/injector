@@ -5,6 +5,13 @@ namespace JanKovacs\Injector\Api;
 
 interface IInjectionMapper {
 
+
+    public const JUST_INJECT = 'just_inject';
+    public const AS_SINGLETON = 'as_singleton';
+    public const TO_SINGLETON = 'to_singleton';
+    public const TO_TYPE = 'to_type';
+    public const TO_OBJECT = 'to_object';
+
     /**
      * Maps to a given type.
      *
@@ -44,15 +51,20 @@ interface IInjectionMapper {
     public function toSingleton(string $type):void;
 
     /**
-     * Returns the instance base on mapping type.
+     * Returns the instance.
      *
      * @api
      *
-     * @param string $where
      *
      * @return null|object
      */
-    public function getInstance(string $where = ''):?object;
+    public function getInstance():?object;
+
+
+    /**
+     * @param object $instance
+     */
+    public function setInstance(object $instance):void;
 
 
     /**
@@ -63,5 +75,11 @@ interface IInjectionMapper {
      * @return string
      */
     public function getMappingType():string;
+
+
+    /**
+     * @return string
+     */
+    public function getClassName():string;
 
 }
