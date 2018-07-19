@@ -1,6 +1,8 @@
 <?php
 namespace JanKovacs\Injector\Api;
 
+use JanKovacs\Injector\Api\IInjectionMapper;
+
 interface IInjectionProvider {
 
     /**
@@ -20,9 +22,10 @@ interface IInjectionProvider {
      */
     public function addToRest():IInjectionMapper;
 
+
     /**
-     * @param string $where
-     * @return null|object
+     * @param string $className
+     * @return \JanKovacs\Injector\Api\IInjectionMapper|null
      */
-    public function getInstance(string $where = ''):?object;
+    public function getMapperByRules(string $className): ?IInjectionMapper;
 }

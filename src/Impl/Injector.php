@@ -68,14 +68,15 @@ class Injector implements IInjector
         /** @var IProviderMapper $injectionMapper */
         $injectionMapper = $this->getInjectionMapper($className);
 
-        if ($injectionMapper === null) {
-            throw new InjectionMapperException('There is no defined mapping for '.$className);
-        }
-
         $mappingType = $injectionMapper->getMappingType();
         $className = $injectionMapper->getClassName();
 
-        if ($mappingType === IProviderMapper::AS_SINGLETON || $mappingType === IProviderMapper::TO_SINGLETON) {
+        if ($mappingType === IProviderMapper::TO_PROVIDER) {
+            return $this->createInstance(
+                $injectionMapper->getClassNameByEndClass($where)
+            );
+        }
+        else if ($mappingType === IProviderMapper::AS_SINGLETON || $mappingType === IProviderMapper::TO_SINGLETON) {
             if ($injectionMapper->getInstance() !== null) {
                 return $injectionMapper->getInstance();
             }
@@ -122,7 +123,7 @@ class Injector implements IInjector
         $constructorParameters = $reflectionClass->getConstructor() ? $reflectionClass->getConstructor()->getParameters() : [];
 
         foreach ($constructorParameters as $parameter) {
-            $constructorPayloads[] = $this->getInstance($parameter->getType()->getName());
+            $constructorPayloads[] = $this->getInstance($parameter->getType()->getName(), $reflectionClass->getName());
         }
         return $constructorPayloads;
     }
@@ -130,9 +131,14 @@ class Injector implements IInjector
     /**
      * @param string $className
      * @return IProviderMapper|null
+     * @throws InjectionMapperException
      */
     protected function getInjectionMapper(string $className):?IProviderMapper
     {
-        return array_key_exists( $className, $this->mappings ) && $this->mappings[ $className ] instanceof IProviderMapper ?  $this->mappings[ $className ] : null;
+        if (array_key_exists( $className, $this->mappings ) && $this->mappings[ $className ] instanceof IProviderMapper) {
+            return $this->mappings[$className];
+        }
+
+        throw new InjectionMapperException('There is no defined mapping for '.$className);
     }
 }

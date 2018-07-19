@@ -13,10 +13,14 @@ class InjectionProvider implements IInjectionProvider {
     /** @var \JanKovacs\Injector\Api\IInjectionMapper */
     protected $exceptionMapper;
 
+    /** @var \JanKovacs\Injector\Api\IInjectionMapper */
+    protected $restMapper;
+
     /** @var string */
     protected $exceptClassName;
 
-    public $className;
+    /** @var string */
+    protected $className;
 
     /**
      * InjectionProvider constructor.
@@ -35,7 +39,7 @@ class InjectionProvider implements IInjectionProvider {
      */
     public function addUnique(string $className):IInjectionMapper
     {
-        $this->uniqueMappers[ $className ] = new InjectionMapper( '' );
+        $this->uniqueMappers[ $className ] = new InjectionMapper( $className );
         return $this->uniqueMappers[ $className ];
     }
 
@@ -46,7 +50,8 @@ class InjectionProvider implements IInjectionProvider {
     public function addExceptTo(string $className):IInjectionMapper
     {
         $this->exceptClassName = $className;
-        return $this->exceptionMapper = new InjectionMapper( $this->className );
+        $this->exceptionMapper = new InjectionMapper( $this->className );
+        return $this->exceptionMapper;
     }
 
     /**
@@ -54,25 +59,24 @@ class InjectionProvider implements IInjectionProvider {
      */
     public function addToRest():IInjectionMapper
     {
-        return $this->addExceptTo( $this->className );
+        $this->restMapper = new InjectionMapper( $this->className );
+        return $this->restMapper;
     }
 
     /**
-     * @param string $where
-     * @return null|object
+     * @param string $className
+     * @return IInjectionMapper|null
      */
-    public function getInstance(string $where = ''):?object
+    public function getMapperByRules(string $className): ?IInjectionMapper
     {
-        $instance = null;
-        if ( array_key_exists( $where, $this->uniqueMappers ) )
-        {
-            $instance = $this->uniqueMappers[ $where ]->getInstance();
-        }
-        else if ( $this->exceptClassName != $where && isset( $this->exceptionMapper ) )
-        {
-            $instance = $this->exceptionMapper->getInstance();
+        if (array_key_exists($className, $this->uniqueMappers)) {
+            return $this->uniqueMappers[$className];
         }
 
-        return $instance;
+        if ($this->exceptClassName === $className) {
+            return $this->exceptionMapper;
+        }
+
+        return $this->restMapper;
     }
 }
