@@ -17,5 +17,8 @@
     "psr-4": {
       "JanKovacs\\Injector\\": "/src"
     }
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.4"
   }
 }
