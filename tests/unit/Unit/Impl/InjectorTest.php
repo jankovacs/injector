@@ -1,13 +1,14 @@
 <?php
-namespace src\Impl;
+namespace Unit\Impl;
 
 use JanKovacs\Injector\Api\IInjectionMapper;
 use JanKovacs\Injector\Impl\Injector;
+use Helper\Classes\TestOneClass;
 
 class InjectorTest extends \Codeception\Test\Unit
 {
 
-    protected const TEST_CLASS_NAME = TestClass::class;
+    protected const TEST_CLASS_NAME = TestOneClass::class;
 
     /** @var \UnitTester */
     protected $tester;
@@ -59,9 +60,4 @@ class InjectorTest extends \Codeception\Test\Unit
         );
 
     }
-}
-
-class TestClass
-{
-
 }
