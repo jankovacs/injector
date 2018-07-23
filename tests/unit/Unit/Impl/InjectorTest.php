@@ -27,6 +27,8 @@ class InjectorTest extends \Codeception\Test\Unit
 
     protected function _after()
     {
+        $this->injector = null;
+        $this->mapper = null;
     }
 
 

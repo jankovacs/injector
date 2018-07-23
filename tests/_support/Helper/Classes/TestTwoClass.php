@@ -5,9 +5,11 @@
  * Proprietary and confidential
  */
 
+
 namespace Helper\Classes;
 
-class TestOneClass implements ITestOneClass
+
+class TestTwoClass implements ITestTwoClass
 {
 
 }

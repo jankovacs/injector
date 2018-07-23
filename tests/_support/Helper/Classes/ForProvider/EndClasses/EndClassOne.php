@@ -5,9 +5,9 @@
  * Proprietary and confidential
  */
 
-namespace Helper\Classes;
+namespace Helper\Classes\ForProvider\EndClasses;
 
-class TestOneClass implements ITestOneClass
+class EndClassOne extends BaseEndClass
 {
 
 }
