@@ -1,4 +1,4 @@
-PHP Dependency Injector.
+Lightweight PHP Dependency Injector
 =======================
 
 Injects the class dependencies based on constructor signature.
@@ -12,6 +12,7 @@ Simple example for usage:
 1) You have to specify somewhere in your application a config file for mappings, like this below:
 
 ```
+
 class InjectionMappings {
 
     public function __construct(IInjector $injector)
@@ -37,18 +38,25 @@ class InjectionMappings {
         //------- will return with the mapped class as singleton
         $this->injector->map( ITestSingleton::class )->toSingleton( TestSingleton::class );
         
+        //------- example for unsing provider
+        //------- 
+        //------- it is for having more complex mapping logic
+        //------- you can map eg. an Interface to different end classes as different implementations
+        //------- be carefull, a not proper use can lead to misbehavior of your application
+        //------- 
+        //------- in this example the TestOne class will be injected to SomeController only
+        //------- in all other classes, where the ITest is required, the TestTwo will be injected
         /** @var \injector\api\IInjectionProvider $providerMappings */
         $providerMappings = $this->injector->map( ITest::class )->toProvider( );
         $providerMappings->addUnique( 'SomeController' )->toSingleton( TestOne::class );
         //$providerMappings->addExceptTo( 'SomeController' )->toSingleton( TestTwo::class );
         $providerMappings->addToRest()->toSingleton( TestTwo::class );
-        $this->injector->map( TestDetectDevice::class );
     }
 }
+
 ```
 
-
-2) Then you need to instantiate the injector and the the mapper class and set the mappings ( setMappings() method in the example above, but it could be named to whatever you want )
+2) Then you need to instantiate the injector and the mapper classes and set the mappings ( setMappings() method in the example above, but it could be named to whatever you want )
 ```
 // create injector
 $injector = new \injector\impl\Injector();
@@ -71,4 +79,4 @@ class IndexController
 }
 ```
 
-You don't need to rewrite your code by adding some injector specific stuff (like in the initial version of this injector), it is injecting the needed dependencies by the constructor signature.
+_You don't need to rewrite your code by adding some injector specific stuff (like in the initial version of this injector), it is injecting the needed dependencies by the constructor signature._
