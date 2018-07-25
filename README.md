@@ -1,6 +1,8 @@
 Lightweight PHP Dependency Injector
 =======================
 
+[![Build Status](https://travis-ci.com/jankovacs/injector.svg?branch=master)](https://travis-ci.com/jankovacs/injector)
+
 Injects the class dependencies based on constructor signature.
 Native types are not supported as dependencies (like int, array, string etc.) as into constructor one should pass just dependencies to other classes, not concrete data, e.g. 'locale' - that could be retrieved from a config class.
 
