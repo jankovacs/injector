@@ -22,5 +22,5 @@ install:
 
 script:
   - set -e
-  - vendor/bin/phpcs src/
+#  - vendor/bin/phpcs src/
   - vendor/bin/codecept run
