@@ -1,0 +1,26 @@
+language: php
+
+matrix:
+  fast_finish: true
+  include:
+    - php: "7.2.6"
+      env:
+          - ON_EVENTS=cron,push
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+
+dist: precise
+
+install:
+  - composer self-update && composer --version
+  - composer install --no-interaction
+
+
+script:
+  - set -e
+  - vendor/bin/phpcs src/
+  - vendor/bin/codecept run
