@@ -15,6 +15,7 @@ interface IEndClass
 {
 
     /**
+     *
      * @return IClassForProvider
      */
     public function getClassForProviderInstance():IClassForProvider;

@@ -16,6 +16,7 @@ class TestSingletonClass implements ITestSingletonClass
 
 
     /**
+     *
      * @return int
      */
     public function getSomeValue():int
@@ -24,7 +25,8 @@ class TestSingletonClass implements ITestSingletonClass
     }
 
     /**
-     * @param int $someValue
+     *
+     * @param  int $someValue
      * @return void
      */
     public function setSomeValue(int $someValue):void

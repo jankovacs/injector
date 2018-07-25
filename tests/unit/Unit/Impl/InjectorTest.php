@@ -10,13 +10,22 @@ class InjectorTest extends \Codeception\Test\Unit
 
     protected const TEST_CLASS_NAME = TestOneClass::class;
 
-    /** @var \UnitTester */
+    /**
+     *
+     * @var \UnitTester 
+     */
     protected $tester;
 
-    /** @var \JanKovacs\Injector\Api\IInjector */
+    /**
+     *
+     * @var \JanKovacs\Injector\Api\IInjector 
+     */
     protected $injector;
 
-    /** @var \JanKovacs\Injector\Api\IInjectionMapper */
+    /**
+     *
+     * @var \JanKovacs\Injector\Api\IInjectionMapper 
+     */
     protected $mapper;
     
     protected function _before()

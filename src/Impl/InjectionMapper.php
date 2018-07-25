@@ -7,16 +7,32 @@ use ReflectionClass;
 
 class InjectionMapper implements IInjectionMapper
 {
-    /** @var string */
+    /**
+     * 
+     *
+     * @var string 
+     */
     protected $className;
 
-    /** @var string */
+    /**
+     * 
+     *
+     * @var string 
+     */
     protected $mappingType;
 
-    /** @var object */
+    /**
+     * 
+     *
+     * @var object 
+     */
     protected $instance;
 
-    /** @var bool */
+    /**
+     * 
+     *
+     * @var bool 
+     */
     protected $isInjectable;
 
     /**
@@ -28,10 +44,11 @@ class InjectionMapper implements IInjectionMapper
     {
         $this->className = $className;
         $this->isInjectable = true;
-        $this->setType( self::JUST_INJECT );
+        $this->setType(self::JUST_INJECT);
     }
 
     /**
+     *
      * @inheritdoc
      */
     public function getMappingType():string
@@ -40,41 +57,46 @@ class InjectionMapper implements IInjectionMapper
     }
 
     /**
+     *
      * @inheritdoc
      */
     public function toType(string $typeName):void
     {
         $this->className = $typeName;
-        $this->setType( self::TO_TYPE );
+        $this->setType(self::TO_TYPE);
     }
 
     /**
+     *
      * @inheritdoc
      */
     public function toObject(object $object):void
     {
         $this->instance = $object;
-        $this->setType( self::TO_OBJECT );
+        $this->setType(self::TO_OBJECT);
     }
 
     /**
+     *
      * @inheritdoc
      */
     public function asSingleton():void
     {
-        $this->setType( self::AS_SINGLETON );
+        $this->setType(self::AS_SINGLETON);
     }
 
     /**
+     *
      * @inheritdoc
      */
     public function toSingleton(string $type):void
     {
         $this->className = $type;
-        $this->setType( self::TO_SINGLETON );
+        $this->setType(self::TO_SINGLETON);
     }
 
     /**
+     *
      * @param string $type
      */
     protected function setType(string $type):void
@@ -83,6 +105,7 @@ class InjectionMapper implements IInjectionMapper
     }
 
     /**
+     *
      * @inheritdoc
      */
     public function getInstance():?object
@@ -91,6 +114,7 @@ class InjectionMapper implements IInjectionMapper
     }
 
     /**
+     *
      * @param object $instance
      */
     public function setInstance(object $instance): void
@@ -99,6 +123,7 @@ class InjectionMapper implements IInjectionMapper
     }
 
     /**
+     *
      * @return string
      */
     public function getClassName(): string

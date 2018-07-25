@@ -19,11 +19,15 @@ use JanKovacs\Injector\Impl\Injector;
 class InjectorTest extends \Codeception\Test\Unit
 {
     /**
+     *
      * @var \FunctionalTester
      */
     protected $tester;
 
-    /** @var \JanKovacs\Injector\Api\IInjector */
+    /**
+     *
+     * @var \JanKovacs\Injector\Api\IInjector 
+     */
     protected $injector;
 
 
@@ -76,7 +80,7 @@ class InjectorTest extends \Codeception\Test\Unit
         $this->injector->map(TestSingletonClass::class)->asSingleton();
         $singletonOne = $this->injector->getInstance(TestSingletonClass::class);
 
-        $singletonOne->setSomeValue(rand(0,1000));
+        $singletonOne->setSomeValue(rand(0, 1000));
 
         $singletonTwo = $this->injector->getInstance(TestSingletonClass::class);
 
@@ -92,7 +96,7 @@ class InjectorTest extends \Codeception\Test\Unit
         $this->injector->map(ITestSingletonClass::class)->toSingleton(TestSingletonClass::class);
         $singletonOne = $this->injector->getInstance(ITestSingletonClass::class);
 
-        $singletonOne->setSomeValue(rand(0,1000));
+        $singletonOne->setSomeValue(rand(0, 1000));
 
         $singletonTwo = $this->injector->getInstance(ITestSingletonClass::class);
 
@@ -114,11 +118,20 @@ class InjectorTest extends \Codeception\Test\Unit
         $this->injector->map(EndClassTwo::class);
         $this->injector->map(EndClassThree::class);
 
-        /** @var IEndClass $endClassOne */
+        /**
+         *
+ * @var IEndClass $endClassOne 
+*/
         $endClassOne = $this->injector->getInstance(EndClassOne::class);
-        /** @var IEndClass $endClassTwo */
+        /**
+         *
+ * @var IEndClass $endClassTwo 
+*/
         $endClassTwo = $this->injector->getInstance(EndClassTwo::class);
-        /** @var IEndClass $endClassThree */
+        /**
+         *
+ * @var IEndClass $endClassThree 
+*/
         $endClassThree = $this->injector->getInstance(EndClassThree::class);
 
         $this->assertContainsOnlyInstancesOf(

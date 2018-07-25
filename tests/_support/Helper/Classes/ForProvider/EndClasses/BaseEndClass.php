@@ -23,6 +23,7 @@ class BaseEndClass implements IEndClass
     }
 
     /**
+     *
      * @return IClassForProvider
      */
     public function getClassForProviderInstance(): IClassForProvider

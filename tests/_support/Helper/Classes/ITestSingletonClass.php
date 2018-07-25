@@ -13,12 +13,14 @@ interface ITestSingletonClass
 {
 
     /**
+     *
      * @return int
      */
     public function getSomeValue():int;
 
     /**
-     * @param int $someValue
+     *
+     * @param  int $someValue
      * @return void
      */
     public function setSomeValue(int $someValue):void;

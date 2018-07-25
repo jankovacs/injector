@@ -10,7 +10,11 @@ use ReflectionClass;
 class Injector implements IInjector
 {
     
-    /** @var array */
+    /**
+     * 
+     *
+     * @var array 
+     */
     protected $mappings;
 
     /**
@@ -25,7 +29,8 @@ class Injector implements IInjector
     }
 
     /**
-     * @param string $className
+     *
+     * @param  string $className
      * @return IProviderMapper
      */
     public function map(string $className):IProviderMapper
@@ -35,19 +40,21 @@ class Injector implements IInjector
     }
 
     /**
-     * @param string $className
+     *
+     * @param  string $className
      * @return IProviderMapper
      */
     protected function createMapping(string $className):IProviderMapper
     {
         $className = $this->cleanClassName($className);
-        $mapper = new ExtendedMapper( $className );
+        $mapper = new ExtendedMapper($className);
         $this->mappings[ $className ] = $mapper;
         return $mapper;
     }
 
     /**
-     * @param string $className
+     *
+     * @param  string $className
      * @return string
      */
     protected function cleanClassName(string $className):string
@@ -56,8 +63,9 @@ class Injector implements IInjector
     }
 
     /**
-     * @param string $className
-     * @param string $where
+     *
+     * @param  string $className
+     * @param  string $where
      * @return null|object
      * @throws InjectionMapperException
      * @throws \ReflectionException
@@ -65,7 +73,11 @@ class Injector implements IInjector
     public function getInstance(string $className, string $where = ''):?object
     {
         $className = $this->cleanClassName($className);
-        /** @var IProviderMapper $injectionMapper */
+        /**
+* 
+         *
+ * @var IProviderMapper $injectionMapper 
+*/
         $injectionMapper = $this->getInjectionMapper($className);
 
         $mappingType = $injectionMapper->getMappingType();
@@ -96,7 +108,8 @@ class Injector implements IInjector
     }
 
     /**
-     * @param string $className
+     *
+     * @param  string $className
      * @return null|object
      * @throws InjectionMapperException
      * @throws \ReflectionException
@@ -112,7 +125,8 @@ class Injector implements IInjector
     }
 
     /**
-     * @param ReflectionClass $reflectionClass
+     *
+     * @param  ReflectionClass $reflectionClass
      * @return array
      * @throws InjectionMapperException
      * @throws \ReflectionException
@@ -129,13 +143,14 @@ class Injector implements IInjector
     }
 
     /**
-     * @param string $className
+     *
+     * @param  string $className
      * @return IProviderMapper|null
      * @throws InjectionMapperException
      */
     protected function getInjectionMapper(string $className):?IProviderMapper
     {
-        if (array_key_exists( $className, $this->mappings ) && $this->mappings[ $className ] instanceof IProviderMapper) {
+        if (array_key_exists($className, $this->mappings) && $this->mappings[ $className ] instanceof IProviderMapper) {
             return $this->mappings[$className];
         }
 

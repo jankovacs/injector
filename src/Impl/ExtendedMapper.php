@@ -8,10 +8,15 @@ use JanKovacs\Injector\Api\IProviderMapper;
 class ExtendedMapper extends InjectionMapper implements IProviderMapper
 {
 
-    /** @var IInjectionProvider */
+    /**
+     * 
+     *
+     * @var IInjectionProvider 
+     */
     protected $injectionProvider;
 
     /**
+     *
      * @return IInjectionProvider
      */
     public function toProvider():IInjectionProvider
@@ -22,7 +27,8 @@ class ExtendedMapper extends InjectionMapper implements IProviderMapper
     }
 
     /**
-     * @param string $endClassName
+     *
+     * @param  string $endClassName
      * @return string
      */
     public function getClassNameByEndClass(string $endClassName): string
