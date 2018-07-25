@@ -1,4 +1,7 @@
 # injector
+
+[![Build Status](https://travis-ci.com/jankovacs/injector.svg?branch=feature%2Fnew_version)](https://travis-ci.com/jankovacs/injector)
+
 PHP Dependency Injector.
 =======================
 
