@@ -7,38 +7,22 @@ use ReflectionClass;
 
 class InjectionMapper implements IInjectionMapper
 {
-    /**
-     * 
-     *
-     * @var string 
-     */
+    /** @var string */
     protected $className;
 
-    /**
-     * 
-     *
-     * @var string 
-     */
+    /** @var string */
     protected $mappingType;
 
-    /**
-     * 
-     *
-     * @var object 
-     */
+    /** @var object */
     protected $instance;
 
-    /**
-     * 
-     *
-     * @var bool 
-     */
+    /** @var bool */
     protected $isInjectable;
 
     /**
      * InjectionMapper constructor.
      *
-     * @param string $className
+     * @param string $className the name of the class
      */
     public function __construct(string $className)
     {
@@ -48,8 +32,9 @@ class InjectionMapper implements IInjectionMapper
     }
 
     /**
+     * Returns with the set mapping type
      *
-     * @inheritdoc
+     * @return string
      */
     public function getMappingType():string
     {
@@ -57,8 +42,11 @@ class InjectionMapper implements IInjectionMapper
     }
 
     /**
+     * Maps to a given type.
      *
-     * @inheritdoc
+     * @param string $typeName the name of the class
+     *
+     * @return void
      */
     public function toType(string $typeName):void
     {
@@ -67,8 +55,11 @@ class InjectionMapper implements IInjectionMapper
     }
 
     /**
+     * Maps to a concrete object.
      *
-     * @inheritdoc
+     * @param object $object the object to which a type is going to be mapped
+     *
+     * @return void
      */
     public function toObject(object $object):void
     {
@@ -77,8 +68,9 @@ class InjectionMapper implements IInjectionMapper
     }
 
     /**
+     * Maps as a singleton.
      *
-     * @inheritdoc
+     * @return void
      */
     public function asSingleton():void
     {
@@ -86,8 +78,11 @@ class InjectionMapper implements IInjectionMapper
     }
 
     /**
+     * Maps the type as a singleton
      *
-     * @inheritdoc
+     * @param string $type the class name of the singleton
+     *
+     * @return void
      */
     public function toSingleton(string $type):void
     {
@@ -97,7 +92,9 @@ class InjectionMapper implements IInjectionMapper
 
     /**
      *
-     * @param string $type
+     * @param string $type the mapping type
+     *
+     * @return void
      */
     protected function setType(string $type):void
     {
@@ -105,8 +102,9 @@ class InjectionMapper implements IInjectionMapper
     }
 
     /**
+     * Returns the instance.
      *
-     * @inheritdoc
+     * @return null|object
      */
     public function getInstance():?object
     {
@@ -115,7 +113,9 @@ class InjectionMapper implements IInjectionMapper
 
     /**
      *
-     * @param object $instance
+     * @param object $instance the instance which was created by the mapping rules
+     *
+     * @return void
      */
     public function setInstance(object $instance): void
     {

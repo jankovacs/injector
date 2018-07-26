@@ -2,7 +2,6 @@
 
 namespace JanKovacs\Injector\Api;
 
-
 interface IInjectionMapper
 {
 
@@ -18,7 +17,9 @@ interface IInjectionMapper
      *
      * @api
      *
-     * @param string $typeName
+     * @param string $typeName the name of the class
+     *
+     * @return void
      */
     public function toType(string $typeName):void;
 
@@ -27,7 +28,9 @@ interface IInjectionMapper
      *
      * @api
      *
-     * @param object $object
+     * @param object $object the object to which a type is going to be mapped
+     *
+     * @return void
      */
     public function toObject(object $object):void;
 
@@ -35,6 +38,8 @@ interface IInjectionMapper
      * Maps as a singleton.
      *
      * @api
+     *
+     * @return void
      */
     public function asSingleton():void;
 
@@ -43,7 +48,9 @@ interface IInjectionMapper
      *
      * @api
      *
-     * @param string $type
+     * @param string $type the class name of the singleton
+     *
+     * @return void
      */
     public function toSingleton(string $type):void;
 
@@ -59,7 +66,9 @@ interface IInjectionMapper
 
     /**
      *
-     * @param object $instance
+     * @param object $instance the instance which was created by the mapping rules
+     *
+     * @return void
      */
     public function setInstance(object $instance):void;
 
@@ -79,5 +88,4 @@ interface IInjectionMapper
      * @return string
      */
     public function getClassName():string;
-
 }

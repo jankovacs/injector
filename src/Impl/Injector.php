@@ -2,6 +2,7 @@
 
 namespace JanKovacs\Injector\Impl;
 
+use JanKovacs\Injector\Api\IInjectionMapper;
 use JanKovacs\Injector\Api\IInjector;
 use JanKovacs\Injector\Api\IProviderMapper;
 use JanKovacs\Injector\Exceptions\InjectionMapperException;
@@ -29,8 +30,8 @@ class Injector implements IInjector
     }
 
     /**
+     * @param  string $className the name of the class
      *
-     * @param  string $className
      * @return IProviderMapper
      */
     public function map(string $className):IProviderMapper
@@ -40,8 +41,8 @@ class Injector implements IInjector
     }
 
     /**
+     * @param  string $className the name of the class
      *
-     * @param  string $className
      * @return IProviderMapper
      */
     protected function createMapping(string $className):IProviderMapper
@@ -53,8 +54,8 @@ class Injector implements IInjector
     }
 
     /**
+     * @param  string $className the name of the class
      *
-     * @param  string $className
      * @return string
      */
     protected function cleanClassName(string $className):string
@@ -63,21 +64,18 @@ class Injector implements IInjector
     }
 
     /**
+     * @param string $className the name of the class
+     * @param string $where     the name of the end class
      *
-     * @param  string $className
-     * @param  string $where
      * @return null|object
+     *
      * @throws InjectionMapperException
      * @throws \ReflectionException
      */
     public function getInstance(string $className, string $where = ''):?object
     {
         $className = $this->cleanClassName($className);
-        /**
-* 
-         *
- * @var IProviderMapper $injectionMapper 
-*/
+        /** @var IInjectionMapper $injectionMapper */
         $injectionMapper = $this->getInjectionMapper($className);
 
         $mappingType = $injectionMapper->getMappingType();
@@ -87,8 +85,7 @@ class Injector implements IInjector
             return $this->createInstance(
                 $injectionMapper->getClassNameByEndClass($where)
             );
-        }
-        else if ($mappingType === IProviderMapper::AS_SINGLETON || $mappingType === IProviderMapper::TO_SINGLETON) {
+        } elseif ($mappingType === IProviderMapper::AS_SINGLETON || $mappingType === IProviderMapper::TO_SINGLETON) {
             if ($injectionMapper->getInstance() !== null) {
                 return $injectionMapper->getInstance();
             }
@@ -96,11 +93,9 @@ class Injector implements IInjector
             $instance = $this->createInstance($className);
             $injectionMapper->setInstance($instance);
             return $instance;
-        }
-        else if ($mappingType === IProviderMapper::TO_TYPE || $mappingType === IProviderMapper::JUST_INJECT) {
+        } elseif ($mappingType === IProviderMapper::TO_TYPE || $mappingType === IProviderMapper::JUST_INJECT) {
             return $this->createInstance($className);
-        }
-        else if ($mappingType === IProviderMapper::TO_OBJECT) {
+        } elseif ($mappingType === IProviderMapper::TO_OBJECT) {
             return $injectionMapper->getInstance();
         }
 
@@ -108,9 +103,10 @@ class Injector implements IInjector
     }
 
     /**
+     * @param  string $className the name of the class
      *
-     * @param  string $className
      * @return null|object
+     *
      * @throws InjectionMapperException
      * @throws \ReflectionException
      */
@@ -125,9 +121,10 @@ class Injector implements IInjector
     }
 
     /**
+     * @param  ReflectionClass $reflectionClass the reflection class
      *
-     * @param  ReflectionClass $reflectionClass
      * @return array
+     *
      * @throws InjectionMapperException
      * @throws \ReflectionException
      */
@@ -144,8 +141,10 @@ class Injector implements IInjector
 
     /**
      *
-     * @param  string $className
+     * @param  string $className the name of the class
+     *
      * @return IProviderMapper|null
+     *
      * @throws InjectionMapperException
      */
     protected function getInjectionMapper(string $className):?IProviderMapper

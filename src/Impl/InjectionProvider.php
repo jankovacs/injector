@@ -46,7 +46,7 @@ class InjectionProvider implements IInjectionProvider
     /**
      * InjectionProvider constructor.
      *
-     * @param string $className
+     * @param string $className the name of the class
      */
     public function __construct(string $className)
     {
@@ -55,9 +55,9 @@ class InjectionProvider implements IInjectionProvider
     }
 
     /**
+     * @param string $className the name of the class
      *
-     * @param  $className
-     * @return \JanKovacs\Injector\Api\IInjectionMapper
+     * @return IInjectionMapper
      */
     public function addUnique(string $className):IInjectionMapper
     {
@@ -66,9 +66,9 @@ class InjectionProvider implements IInjectionProvider
     }
 
     /**
+     * @param string $className the name of the class
      *
-     * @param  $className
-     * @return \JanKovacs\Injector\Api\IInjectionMapper
+     * @return IInjectionMapper
      */
     public function addExceptTo(string $className):IInjectionMapper
     {
@@ -89,7 +89,8 @@ class InjectionProvider implements IInjectionProvider
 
     /**
      *
-     * @param  string $className
+     * @param  string $className the name of the class
+     *
      * @return IInjectionMapper|null
      */
     public function getMapperByRules(string $className): ?IInjectionMapper

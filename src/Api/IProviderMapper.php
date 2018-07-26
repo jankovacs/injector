@@ -2,7 +2,6 @@
 
 namespace JanKovacs\Injector\Api;
 
-
 interface IProviderMapper extends IInjectionMapper
 {
 
@@ -16,7 +15,8 @@ interface IProviderMapper extends IInjectionMapper
 
     /**
      *
-     * @param  string $endClassName
+     * @param  string $endClassName the name of the class in which the mapped instance will be used
+     *
      * @return string
      */
     public function getClassNameByEndClass(string $endClassName): string;
