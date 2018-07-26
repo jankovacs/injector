@@ -1,8 +1,9 @@
 {
   "name": "jankovacs/injector",
   "description": "PHP dependency injector",
-  "version": "1.0.0",
-  "license": "No license",
+  "version": "v1.0.0",
+  "minimum-stability": "dev",
+  "license": "MIT license",
   "authors": [
     {
       "name": "Jan Kovács",
@@ -10,11 +11,15 @@
     }
   ],
   "require": {
-    "php":">=5.5"
+    "php":">=7.2"
   },
   "autoload": {
-        "psr-4": {
-            "injector\\": "/"
-        }
+    "psr-4": {
+      "JanKovacs\\Injector\\": "src"
+    }
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.4",
+    "squizlabs/php_codesniffer": "^3.3"
   }
 }
