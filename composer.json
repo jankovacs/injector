@@ -1,7 +1,7 @@
 {
   "name": "jankovacs/injector",
   "description": "PHP dependency injector",
-  "version": "v1.0.0",
+  "version": "v3.0.0",
   "minimum-stability": "dev",
   "license": "MIT license",
   "authors": [
