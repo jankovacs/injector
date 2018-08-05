@@ -16,14 +16,6 @@ interface InjectionProviderInterface
 
     /**
      *
-     * @param  string $className the name of the class to which the given should not be injected
-     *
-     * @return InjectionMapperInterface
-     */
-    public function addExceptTo(string $className):InjectionMapperInterface;
-
-    /**
-     *
      * @return InjectionMapperInterface
      */
     public function addToRest():InjectionMapperInterface;
