@@ -8,8 +8,7 @@
 
 namespace Helper\Classes;
 
-
-class TestTwoClass implements ITestTwoClass
+class TestTwoClass implements TestTwoClassInterface
 {
 
 }

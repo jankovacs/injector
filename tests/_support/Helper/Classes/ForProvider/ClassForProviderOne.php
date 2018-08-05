@@ -8,8 +8,7 @@
 
 namespace Helper\Classes\ForProvider;
 
-
-class ClassForProviderOne implements IClassForProvider
+class ClassForProviderOne implements ClassForProviderInterface
 {
 
 }

@@ -6,10 +6,9 @@
  */
 
 
-namespace Helper\Classes\ForProvider;
+namespace Helper\Classes;
 
-
-interface IClassForProvider
+interface TestOneClassInterface
 {
 
 }

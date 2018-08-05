@@ -8,7 +8,6 @@
 
 namespace Helper\Classes\ForProvider\EndClasses;
 
-
 class EndClassThree extends BaseEndClass
 {
 

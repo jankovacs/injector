@@ -2,22 +2,22 @@
 
 namespace JanKovacs\Injector\Impl;
 
-use JanKovacs\Injector\Api\IInjectionProvider;
-use JanKovacs\Injector\Api\IProviderMapper;
+use JanKovacs\Injector\Api\InjectionProviderInterface;
+use JanKovacs\Injector\Api\ProviderMapperInterface;
 
-class ExtendedMapper extends InjectionMapper implements IProviderMapper
+class ExtendedMapper extends InjectionMapper implements ProviderMapperInterface
 {
 
-    /** @var \JanKovacs\Injector\Api\IInjectionProvider */
+    /** @var \JanKovacs\Injector\Api\InjectionProviderInterface */
     protected $injectionProvider;
 
     /**
      *
-     * @return IInjectionProvider
+     * @return InjectionProviderInterface
      */
-    public function toProvider():IInjectionProvider
+    public function toProvider():InjectionProviderInterface
     {
-        $this->mappingType = IProviderMapper::TO_PROVIDER;
+        $this->mappingType = ProviderMapperInterface::TO_PROVIDER;
         $this->injectionProvider = new InjectionProvider($this->className);
         return $this->injectionProvider;
     }

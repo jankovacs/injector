@@ -2,7 +2,7 @@
 
 namespace JanKovacs\Injector\Api;
 
-interface IInjectionMapper
+interface InjectionMapperInterface
 {
 
 

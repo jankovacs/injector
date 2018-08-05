@@ -2,13 +2,12 @@
 
 namespace JanKovacs\Injector\Impl;
 
-use JanKovacs\Injector\Api\IInjectionMapper;
-use JanKovacs\Injector\Api\IInjector;
-use JanKovacs\Injector\Api\IProviderMapper;
+use JanKovacs\Injector\Api\InjectorInterface;
+use JanKovacs\Injector\Api\ProviderMapperInterface;
 use JanKovacs\Injector\Exceptions\InjectionMapperException;
 use ReflectionClass;
 
-class Injector implements IInjector
+class Injector implements InjectorInterface
 {
     
     /**
@@ -25,16 +24,16 @@ class Injector implements IInjector
     {
         $this->mappings = array();
         $this
-            ->map(IInjector::class)
+            ->map(Injector::class)
             ->toObject($this);
     }
 
     /**
      * @param  string $className the name of the class
      *
-     * @return IProviderMapper
+     * @return ProviderMapperInterface
      */
-    public function map(string $className):IProviderMapper
+    public function map(string $className):ProviderMapperInterface
     {
         $className = $this->cleanClassName($className);
         return array_key_exists($className, $this->mappings) ? $this->mappings[ $className ] : $this->createMapping($className);
@@ -43,9 +42,9 @@ class Injector implements IInjector
     /**
      * @param  string $className the name of the class
      *
-     * @return IProviderMapper
+     * @return ProviderMapperInterface
      */
-    protected function createMapping(string $className):IProviderMapper
+    protected function createMapping(string $className):ProviderMapperInterface
     {
         $className = $this->cleanClassName($className);
         $mapper = new ExtendedMapper($className);
@@ -75,17 +74,17 @@ class Injector implements IInjector
     public function getInstance(string $className, string $where = ''):?object
     {
         $className = $this->cleanClassName($className);
-        /** @var IInjectionMapper $injectionMapper */
+        /** @var InjectionMapper $injectionMapper */
         $injectionMapper = $this->getInjectionMapper($className);
 
         $mappingType = $injectionMapper->getMappingType();
         $className = $injectionMapper->getClassName();
 
-        if ($mappingType === IProviderMapper::TO_PROVIDER) {
+        if ($mappingType === ProviderMapperInterface::TO_PROVIDER) {
             return $this->createInstance(
                 $injectionMapper->getClassNameByEndClass($where)
             );
-        } elseif ($mappingType === IProviderMapper::AS_SINGLETON || $mappingType === IProviderMapper::TO_SINGLETON) {
+        } elseif ($mappingType === ProviderMapperInterface::AS_SINGLETON || $mappingType === ProviderMapperInterface::TO_SINGLETON) {
             if ($injectionMapper->getInstance() !== null) {
                 return $injectionMapper->getInstance();
             }
@@ -93,9 +92,9 @@ class Injector implements IInjector
             $instance = $this->createInstance($className);
             $injectionMapper->setInstance($instance);
             return $instance;
-        } elseif ($mappingType === IProviderMapper::TO_TYPE || $mappingType === IProviderMapper::JUST_INJECT) {
+        } elseif ($mappingType === ProviderMapperInterface::TO_TYPE || $mappingType === ProviderMapperInterface::JUST_INJECT) {
             return $this->createInstance($className);
-        } elseif ($mappingType === IProviderMapper::TO_OBJECT) {
+        } elseif ($mappingType === ProviderMapperInterface::TO_OBJECT) {
             return $injectionMapper->getInstance();
         }
 
@@ -143,13 +142,13 @@ class Injector implements IInjector
      *
      * @param  string $className the name of the class
      *
-     * @return IProviderMapper|null
+     * @return ProviderMapperInterface|null
      *
      * @throws InjectionMapperException
      */
-    protected function getInjectionMapper(string $className):?IProviderMapper
+    protected function getInjectionMapper(string $className):?ProviderMapperInterface
     {
-        if (array_key_exists($className, $this->mappings) && $this->mappings[ $className ] instanceof IProviderMapper) {
+        if (array_key_exists($className, $this->mappings) && $this->mappings[ $className ] instanceof ProviderMapperInterface) {
             return $this->mappings[$className];
         }
 

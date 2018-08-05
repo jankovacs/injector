@@ -8,16 +8,16 @@ namespace JanKovacs\Injector\Api;
  * @var     boolean $isInjectable
  * @package JanKovacs\Injector\Api
  */
-interface IInjector
+interface InjectorInterface
 {
 
     /**
      *
      * @param  string $className the name of the class/interface which will be mapped
      *
-     * @return IProviderMapper
+     * @return ProviderMapperInterface
      */
-    public function map(string $className):IProviderMapper;
+    public function map(string $className):ProviderMapperInterface;
 
     /**
      *

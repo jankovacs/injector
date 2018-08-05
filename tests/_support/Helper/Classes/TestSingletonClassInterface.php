@@ -8,8 +8,7 @@
 
 namespace Helper\Classes;
 
-
-interface ITestSingletonClass
+interface TestSingletonClassInterface
 {
 
     /**
@@ -20,7 +19,7 @@ interface ITestSingletonClass
 
     /**
      *
-     * @param  int $someValue
+     * @param  int $someValue some value for testing purposes
      * @return void
      */
     public function setSomeValue(int $someValue):void;

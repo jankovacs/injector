@@ -8,16 +8,14 @@
 
 namespace Helper\Classes\ForProvider\EndClasses;
 
+use Helper\Classes\ForProvider\ClassForProviderInterface;
 
-use Helper\Classes\ForProvider\IClassForProvider;
-
-interface IEndClass
+interface EndClassInterface
 {
 
     /**
      *
-     * @return IClassForProvider
+     * @return ClassForProviderInterface
      */
-    public function getClassForProviderInstance():IClassForProvider;
-
+    public function getClassForProviderInstance():ClassForProviderInterface;
 }

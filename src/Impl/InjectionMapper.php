@@ -2,10 +2,9 @@
 
 namespace JanKovacs\Injector\Impl;
 
-use JanKovacs\Injector\Api\IInjectionMapper;
-use ReflectionClass;
+use JanKovacs\Injector\Api\InjectionMapperInterface;
 
-class InjectionMapper implements IInjectionMapper
+class InjectionMapper implements InjectionMapperInterface
 {
     /** @var string */
     protected $className;
@@ -20,7 +19,7 @@ class InjectionMapper implements IInjectionMapper
     protected $isInjectable;
 
     /**
-     * InjectionMapper constructor.
+     * InjectionMapperInterface constructor.
      *
      * @param string $className the name of the class
      */

@@ -7,7 +7,7 @@
 
 namespace Helper\Classes;
 
-class TestOneClass implements ITestOneClass
+class TestOneClass implements TestOneClassInterface
 {
 
 }

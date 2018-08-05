@@ -6,10 +6,9 @@
  */
 
 
-namespace Helper\Classes;
+namespace Helper\Classes\ForProvider;
 
-
-interface ITestTwoClass
+interface ClassForProviderInterface
 {
 
 }
