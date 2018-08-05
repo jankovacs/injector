@@ -2,10 +2,10 @@
 
 namespace JanKovacs\Injector\Impl;
 
-use JanKovacs\Injector\Api\IInjectionProvider;
-use JanKovacs\Injector\Api\IInjectionMapper;
+use JanKovacs\Injector\Api\InjectionProviderInterface;
+use JanKovacs\Injector\Api\InjectionMapperInterface;
 
-class InjectionProvider implements IInjectionProvider
+class InjectionProvider implements InjectionProviderInterface
 {
 
     /**
@@ -18,14 +18,14 @@ class InjectionProvider implements IInjectionProvider
     /**
      * 
      *
-     * @var \JanKovacs\Injector\Api\IInjectionMapper 
+     * @var \JanKovacs\Injector\Api\InjectionMapperInterface
      */
     protected $exceptionMapper;
 
     /**
      * 
      *
-     * @var \JanKovacs\Injector\Api\IInjectionMapper 
+     * @var \JanKovacs\Injector\Api\InjectionMapperInterface
      */
     protected $restMapper;
 
@@ -57,9 +57,9 @@ class InjectionProvider implements IInjectionProvider
     /**
      * @param string $className the name of the class
      *
-     * @return IInjectionMapper
+     * @return InjectionMapper
      */
-    public function addUnique(string $className):IInjectionMapper
+    public function addUnique(string $className):InjectionMapperInterface
     {
         $this->uniqueMappers[ $className ] = new InjectionMapper($className);
         return $this->uniqueMappers[ $className ];
@@ -68,9 +68,9 @@ class InjectionProvider implements IInjectionProvider
     /**
      * @param string $className the name of the class
      *
-     * @return IInjectionMapper
+     * @return InjectionMapper
      */
-    public function addExceptTo(string $className):IInjectionMapper
+    public function addExceptTo(string $className):InjectionMapperInterface
     {
         $this->exceptClassName = $className;
         $this->exceptionMapper = new InjectionMapper($this->className);
@@ -79,9 +79,9 @@ class InjectionProvider implements IInjectionProvider
 
     /**
      *
-     * @return \JanKovacs\Injector\Api\IInjectionMapper
+     * @return \JanKovacs\Injector\Api\InjectionMapperInterface
      */
-    public function addToRest():IInjectionMapper
+    public function addToRest():InjectionMapperInterface
     {
         $this->restMapper = new InjectionMapper($this->className);
         return $this->restMapper;
@@ -91,9 +91,9 @@ class InjectionProvider implements IInjectionProvider
      *
      * @param  string $className the name of the class
      *
-     * @return IInjectionMapper|null
+     * @return InjectionMapper|null
      */
-    public function getMapperByRules(string $className): ?IInjectionMapper
+    public function getMapperByRules(string $className): ?InjectionMapperInterface
     {
         if (array_key_exists($className, $this->uniqueMappers)) {
             return $this->uniqueMappers[$className];

@@ -2,16 +2,16 @@
 
 namespace JanKovacs\Injector\Api;
 
-interface IProviderMapper extends IInjectionMapper
+interface ProviderMapperInterface extends InjectionMapperInterface
 {
 
     public const TO_PROVIDER = 'to_provider';
 
     /**
      *
-     * @return IInjectionProvider
+     * @return InjectionProviderInterface
      */
-    public function toProvider():IInjectionProvider;
+    public function toProvider():InjectionProviderInterface;
 
     /**
      *

@@ -6,14 +6,14 @@ use Helper\Classes\ForProvider\ClassForProviderTwo;
 use Helper\Classes\ForProvider\EndClasses\EndClassOne;
 use Helper\Classes\ForProvider\EndClasses\EndClassThree;
 use Helper\Classes\ForProvider\EndClasses\EndClassTwo;
-use Helper\Classes\ForProvider\EndClasses\IEndClass;
-use Helper\Classes\ITestOneClass;
-use Helper\Classes\ITestSingletonClass;
-use Helper\Classes\ITestTwoClass;
+use Helper\Classes\ForProvider\EndClasses\EndClassInterface;
+use Helper\Classes\TestOneClassInterface;
+use Helper\Classes\TestSingletonClassInterface;
+use Helper\Classes\TestTwoClassInterface;
 use Helper\Classes\TestOneClass;
 use Helper\Classes\TestSingletonClass;
 use Helper\Classes\TestTwoClass;
-use Helper\Classes\ForProvider\IClassForProvider;
+use Helper\Classes\ForProvider\ClassForProviderInterface;
 use JanKovacs\Injector\Impl\Injector;
 
 class InjectorTest extends \Codeception\Test\Unit
@@ -26,23 +26,31 @@ class InjectorTest extends \Codeception\Test\Unit
 
     /**
      *
-     * @var \JanKovacs\Injector\Api\IInjector 
+     * @var \JanKovacs\Injector\Api\InjectorInterface
      */
     protected $injector;
 
 
+    /**
+     * @return void
+     */
     protected function _before()
     {
         $this->injector = new Injector();
     }
 
+    /**
+     * @return void
+     */
     protected function _after()
     {
         $this->injector = null;
     }
 
-    // tests
-    public function testSimpleMapping()
+    /**
+     * @return void
+     */
+    public function testSimpleMapping():void
     {
         $this->injector->map(TestOneClass::class);
         $instance = $this->injector->getInstance(TestOneClass::class);
@@ -53,10 +61,13 @@ class InjectorTest extends \Codeception\Test\Unit
     }
 
 
-    public function testMapToType()
+    /**
+     * @return void
+     */
+    public function testMapToType():void
     {
-        $this->injector->map(ITestOneClass::class)->toType(TestOneClass::class);
-        $instance = $this->injector->getInstance(ITestOneClass::class);
+        $this->injector->map(TestOneClassInterface::class)->toType(TestOneClass::class);
+        $instance = $this->injector->getInstance(TestOneClassInterface::class);
         $this->assertContainsOnlyInstancesOf(
             TestOneClass::class,
             [$instance]
@@ -64,18 +75,24 @@ class InjectorTest extends \Codeception\Test\Unit
 
     }
 
-    public function testMapToObject()
+    /**
+     * @return void
+     */
+    public function testMapToObject():void
     {
         $testClassTwo = new TestTwoClass();
-        $this->injector->map(ITestTwoClass::class)->toObject($testClassTwo);
-        $instance = $this->injector->getInstance(ITestTwoClass::class);
+        $this->injector->map(TestTwoClassInterface::class)->toObject($testClassTwo);
+        $instance = $this->injector->getInstance(TestTwoClassInterface::class);
         $this->assertSame(
             $testClassTwo,
             $instance
         );
     }
 
-    public function testAsSingleton()
+    /**
+     * @return void
+     */
+    public function testAsSingleton():void
     {
         $this->injector->map(TestSingletonClass::class)->asSingleton();
         $singletonOne = $this->injector->getInstance(TestSingletonClass::class);
@@ -91,14 +108,17 @@ class InjectorTest extends \Codeception\Test\Unit
 
     }
 
-    public function testMapToSingleton()
+    /**
+     * @return void
+     */
+    public function testMapToSingleton():void
     {
-        $this->injector->map(ITestSingletonClass::class)->toSingleton(TestSingletonClass::class);
-        $singletonOne = $this->injector->getInstance(ITestSingletonClass::class);
+        $this->injector->map(TestSingletonClassInterface::class)->toSingleton(TestSingletonClass::class);
+        $singletonOne = $this->injector->getInstance(TestSingletonClassInterface::class);
 
         $singletonOne->setSomeValue(rand(0, 1000));
 
-        $singletonTwo = $this->injector->getInstance(ITestSingletonClass::class);
+        $singletonTwo = $this->injector->getInstance(TestSingletonClassInterface::class);
 
         $this->assertSame(
             $singletonOne,
@@ -107,9 +127,12 @@ class InjectorTest extends \Codeception\Test\Unit
     }
 
 
-    public function testMapToProvider()
+    /**
+     * @return void
+     */
+    public function testMapToProvider():void
     {
-        $provider = $this->injector->map(IClassForProvider::class)->toProvider();
+        $provider = $this->injector->map(ClassForProviderInterface::class)->toProvider();
         $provider->addUnique(EndClassOne::class)->toType(ClassForProviderOne::class);
         $provider->addToRest()->toType(ClassForProviderTwo::class);
         $provider->addUnique(EndClassThree::class)->toType(ClassForProviderOne::class);
@@ -118,20 +141,13 @@ class InjectorTest extends \Codeception\Test\Unit
         $this->injector->map(EndClassTwo::class);
         $this->injector->map(EndClassThree::class);
 
-        /**
-         *
- * @var IEndClass $endClassOne 
-*/
+        /** @var EndClassInterface $endClassOne */
         $endClassOne = $this->injector->getInstance(EndClassOne::class);
-        /**
-         *
- * @var IEndClass $endClassTwo 
-*/
+
+        /** @var EndClassInterface $endClassTwo */
         $endClassTwo = $this->injector->getInstance(EndClassTwo::class);
-        /**
-         *
- * @var IEndClass $endClassThree 
-*/
+
+        /** @var EndClassInterface $endClassThree */
         $endClassThree = $this->injector->getInstance(EndClassThree::class);
 
         $this->assertContainsOnlyInstancesOf(

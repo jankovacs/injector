@@ -8,8 +8,7 @@
 
 namespace Helper\Classes;
 
-
-interface ITestOneClass
+interface TestTwoClassInterface
 {
 
 }

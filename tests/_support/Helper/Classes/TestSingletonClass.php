@@ -8,8 +8,7 @@
 
 namespace Helper\Classes;
 
-
-class TestSingletonClass implements ITestSingletonClass
+class TestSingletonClass implements TestSingletonClassInterface
 {
 
     protected $someValue;
@@ -26,7 +25,7 @@ class TestSingletonClass implements ITestSingletonClass
 
     /**
      *
-     * @param  int $someValue
+     * @param  int $someValue some value for testing purposes
      * @return void
      */
     public function setSomeValue(int $someValue):void

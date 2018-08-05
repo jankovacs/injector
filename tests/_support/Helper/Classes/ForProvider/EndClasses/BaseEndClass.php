@@ -8,25 +8,28 @@
 
 namespace Helper\Classes\ForProvider\EndClasses;
 
+use Helper\Classes\ForProvider\ClassForProviderInterface;
 
-use Helper\Classes\ForProvider\IClassForProvider;
-
-class BaseEndClass implements IEndClass
+class BaseEndClass implements EndClassInterface
 {
 
     protected $classForProvider;
 
 
-    public function __construct(IClassForProvider $classForProvider)
+    /**
+     * BaseEndClass constructor.
+     * @param ClassForProviderInterface $classForProvider class used for provider interface test
+     */
+    public function __construct(ClassForProviderInterface $classForProvider)
     {
         $this->classForProvider = $classForProvider;
     }
 
     /**
      *
-     * @return IClassForProvider
+     * @return ClassForProviderInterface
      */
-    public function getClassForProviderInstance(): IClassForProvider
+    public function getClassForProviderInstance(): ClassForProviderInterface
     {
         return $this->classForProvider;
     }
