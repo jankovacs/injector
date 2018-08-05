@@ -65,17 +65,6 @@ class InjectionProvider implements InjectionProviderInterface
         return $this->uniqueMappers[ $className ];
     }
 
-    /**
-     * @param string $className the name of the class
-     *
-     * @return InjectionMapper
-     */
-    public function addExceptTo(string $className):InjectionMapperInterface
-    {
-        $this->exceptClassName = $className;
-        $this->exceptionMapper = new InjectionMapper($this->className);
-        return $this->exceptionMapper;
-    }
 
     /**
      *
