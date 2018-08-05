@@ -75,7 +75,17 @@ class Injector implements InjectorInterface
     {
         $className = $this->cleanClassName($className);
         /** @var InjectionMapper $injectionMapper */
-        $injectionMapper = $this->getInjectionMapper($className);
+        try {
+            $injectionMapper = $this->getInjectionMapper($className);
+        } catch (InjectionMapperException $injectionMapperException) {
+
+            if (class_exists($className) === false || interface_exists($className)) {
+                throw $injectionMapperException;
+            }
+
+            $this->map($className);
+            $injectionMapper = $this->getInjectionMapper($className);
+        }
 
         $mappingType = $injectionMapper->getMappingType();
         $className = $injectionMapper->getClassName();
