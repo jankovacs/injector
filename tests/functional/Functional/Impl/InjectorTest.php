@@ -7,6 +7,8 @@ use Helper\Classes\ForProvider\EndClasses\EndClassOne;
 use Helper\Classes\ForProvider\EndClasses\EndClassThree;
 use Helper\Classes\ForProvider\EndClasses\EndClassTwo;
 use Helper\Classes\ForProvider\EndClasses\EndClassInterface;
+use Helper\Classes\NotMappedClass;
+use Helper\Classes\NotMappedInterface;
 use Helper\Classes\TestOneClassInterface;
 use Helper\Classes\TestSingletonClassInterface;
 use Helper\Classes\TestTwoClassInterface;
@@ -14,6 +16,7 @@ use Helper\Classes\TestOneClass;
 use Helper\Classes\TestSingletonClass;
 use Helper\Classes\TestTwoClass;
 use Helper\Classes\ForProvider\ClassForProviderInterface;
+use JanKovacs\Injector\Exceptions\InjectionMapperException;
 use JanKovacs\Injector\Impl\Injector;
 
 class InjectorTest extends \Codeception\Test\Unit
@@ -164,5 +167,28 @@ class InjectorTest extends \Codeception\Test\Unit
             ClassForProviderOne::class,
             [$endClassThree->getClassForProviderInstance()]
         );
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testNotMappedClass():void
+    {
+        $instance = $this->injector->getInstance(NotMappedClass::class);
+        $this->assertContainsOnlyInstancesOf(
+            NotMappedClass::class,
+            [$instance]
+        );
+    }
+
+    /**
+     * @expectedException \JanKovacs\Injector\Exceptions\InjectionMapperException
+     *
+     * @return void
+     */
+    public function testNotMappedInterface():void
+    {
+        $instance = $this->injector->getInstance(NotMappedInterface::class);
     }
 }
