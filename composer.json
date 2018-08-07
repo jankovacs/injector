@@ -1,13 +1,13 @@
 {
   "name": "jankovacs/injector",
-  "description": "PHP dependency injector",
-  "version": "v3.0.0",
+  "description": "Lightweight PHP dependency injector",
   "minimum-stability": "dev",
-  "license": "MIT license",
+  "prefer-stable": true,
+  "license": "MIT",
   "authors": [
     {
       "name": "Jan Kovács",
-      "email": "jan.v.kovacs@gmail.com"
+      "email": "jan.kovacs@gmail.com"
     }
   ],
   "require": {
