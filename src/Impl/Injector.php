@@ -24,7 +24,7 @@ class Injector implements InjectorInterface
     {
         $this->mappings = array();
         $this
-            ->map(Injector::class)
+            ->map(InjectorInterface::class)
             ->toObject($this);
     }
 

@@ -16,6 +16,7 @@ use Helper\Classes\TestOneClass;
 use Helper\Classes\TestSingletonClass;
 use Helper\Classes\TestTwoClass;
 use Helper\Classes\ForProvider\ClassForProviderInterface;
+use JanKovacs\Injector\Api\InjectorInterface;
 use JanKovacs\Injector\Exceptions\InjectionMapperException;
 use JanKovacs\Injector\Impl\Injector;
 
@@ -189,6 +190,19 @@ class InjectorTest extends \Codeception\Test\Unit
      */
     public function testNotMappedInterface():void
     {
-        $instance = $this->injector->getInstance(NotMappedInterface::class);
+        $this->injector->getInstance(NotMappedInterface::class);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testInjectorMapped():void
+    {
+        $instance = $this->injector->getInstance(InjectorInterface::class);
+        $this->assertContainsOnlyInstancesOf(
+            Injector::class,
+            [$instance]
+        );
     }
 }
